@@ -1,4 +1,4 @@
-package com.baktiyar11.shoppinglist.presentation
+package com.baktiyar11.shoppinglist.presentation.main
 
 import android.os.Bundle
 import android.util.Log
@@ -10,13 +10,18 @@ import com.baktiyar11.shoppinglist.databinding.ActivityMainBinding
 import com.baktiyar11.shoppinglist.domain.utils.MAX_POOL_SIZE
 import com.baktiyar11.shoppinglist.domain.utils.VIEW_TYPE_DISABLED
 import com.baktiyar11.shoppinglist.domain.utils.VIEW_TYPE_ENABLED
-import com.baktiyar11.shoppinglist.presentation.adapter.ShopListAdapter
+import com.baktiyar11.shoppinglist.presentation.shopItem.ShopItemActivity
+import com.baktiyar11.shoppinglist.presentation.main.adapter.ShopListAdapter
 
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val viewModel: MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
     private val shopListAdapter: ShopListAdapter by lazy {
         ShopListAdapter()
     }
@@ -39,6 +44,9 @@ class MainActivity : AppCompatActivity() {
         setupLongClickListener()
         setupClickListener()
         setupSwipeDeleteListener(rvShopItem)
+        buttonAddShopItem.setOnClickListener {
+            startActivity(ShopItemActivity.newIntentAddItem(context = this@MainActivity))
+        }
     }
 
     private fun setupSwipeDeleteListener(rvShopItem: RecyclerView) {
@@ -57,8 +65,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupClickListener() {
-        shopListAdapter.onShopItemClickListener = {
+        shopListAdapter.onShopItemClickListener = { shopItem ->
             Log.d("MainActivity", "Alright")
+            startActivity(ShopItemActivity.newIntentEditItem(context = this@MainActivity,
+                shopItemId = shopItem.id))
         }
     }
 

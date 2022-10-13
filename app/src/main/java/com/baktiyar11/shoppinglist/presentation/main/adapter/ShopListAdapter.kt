@@ -1,4 +1,4 @@
-package com.baktiyar11.shoppinglist.presentation.adapter
+package com.baktiyar11.shoppinglist.presentation.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

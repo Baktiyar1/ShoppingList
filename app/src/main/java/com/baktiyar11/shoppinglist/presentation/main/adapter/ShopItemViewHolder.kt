@@ -1,4 +1,4 @@
-package com.baktiyar11.shoppinglist.presentation.adapter
+package com.baktiyar11.shoppinglist.presentation.main.adapter
 
 import android.view.View
 import android.widget.TextView

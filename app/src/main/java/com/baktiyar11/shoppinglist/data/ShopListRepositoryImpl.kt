@@ -3,7 +3,7 @@ package com.baktiyar11.shoppinglist.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.baktiyar11.shoppinglist.domain.ShopItem
-import com.baktiyar11.shoppinglist.domain.ShopListRepository
+import com.baktiyar11.shoppinglist.domain.main_usecase.ShopListRepository
 import com.baktiyar11.shoppinglist.domain.utils.AUTO_INCREMENT_ID
 import com.baktiyar11.shoppinglist.domain.utils.UNDEFINED_ID
 import kotlin.random.Random
@@ -15,9 +15,9 @@ object ShopListRepositoryImpl : ShopListRepository {
     private var autoIncrementId = AUTO_INCREMENT_ID
 
     init {
-        for (i in 0 until 1000) {
+        for (i in 0 until 10) {
             val item = ShopItem(name = "Name $i", count = i, enabled = Random.nextBoolean())
-            addShopItem(item)
+            addShopItem(shopItem = item)
         }
     }
 
@@ -33,9 +33,9 @@ object ShopListRepositoryImpl : ShopListRepository {
     }
 
     override fun editShopItem(shopItem: ShopItem) {
-        val oldElement = getShopItem(shopItem.id)
+        val oldElement = getShopItem(shopItemId = shopItem.id)
         shopList.remove(oldElement)
-        addShopItem(shopItem)
+        addShopItem(shopItem = shopItem)
     }
 
     override fun getShopItem(shopItemId: Int): ShopItem = shopList.find { it.id == shopItemId }
