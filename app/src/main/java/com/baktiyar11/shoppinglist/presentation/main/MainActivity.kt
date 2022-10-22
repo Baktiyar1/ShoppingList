@@ -1,20 +1,22 @@
 package com.baktiyar11.shoppinglist.presentation.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.baktiyar11.shoppinglist.R
 import com.baktiyar11.shoppinglist.databinding.ActivityMainBinding
 import com.baktiyar11.shoppinglist.domain.utils.MAX_POOL_SIZE
 import com.baktiyar11.shoppinglist.domain.utils.VIEW_TYPE_DISABLED
 import com.baktiyar11.shoppinglist.domain.utils.VIEW_TYPE_ENABLED
-import com.baktiyar11.shoppinglist.presentation.shopItem.ShopItemActivity
+import com.baktiyar11.shoppinglist.domain.utils.toast
 import com.baktiyar11.shoppinglist.presentation.main.adapter.ShopListAdapter
+import com.baktiyar11.shoppinglist.presentation.shopItem.ShopItemActivity
+import com.baktiyar11.shoppinglist.presentation.shopItem.ShopItemFragment
 
-
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -25,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private val shopListAdapter: ShopListAdapter by lazy {
         ShopListAdapter()
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +49,24 @@ class MainActivity : AppCompatActivity() {
         setupClickListener()
         setupSwipeDeleteListener(rvShopItem)
         buttonAddShopItem.setOnClickListener {
-            startActivity(ShopItemActivity.newIntentAddItem(context = this@MainActivity))
+            if (isOnePaneMode()) startActivity(ShopItemActivity.newIntentAddItem(context = this@MainActivity))
+            else launchFragment(fragment = ShopItemFragment.newInstanceAddItem())
         }
+    }
+
+    override fun onEditingFinished() {
+        toast("Success")
+        supportFragmentManager.popBackStack()
+    }
+
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction().replace(R.id.shop_item_container, fragment)
+            .addToBackStack(null).commit()
+    }
+
+    private fun isOnePaneMode(): Boolean {
+        return binding.shopItemContainer == null
     }
 
     private fun setupSwipeDeleteListener(rvShopItem: RecyclerView) {
@@ -66,9 +86,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListener() {
         shopListAdapter.onShopItemClickListener = { shopItem ->
-            Log.d("MainActivity", "Alright")
-            startActivity(ShopItemActivity.newIntentEditItem(context = this@MainActivity,
-                shopItemId = shopItem.id))
+            if (isOnePaneMode()) startActivity(ShopItemActivity.newIntentEditItem(
+                context = this@MainActivity, shopItemId = shopItem.id))
+            else launchFragment(ShopItemFragment.newInstanceEditItem(shopItemId = shopItem.id))
         }
     }
 
