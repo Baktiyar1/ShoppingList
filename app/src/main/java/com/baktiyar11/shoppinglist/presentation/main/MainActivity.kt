@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
         ShopListAdapter()
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

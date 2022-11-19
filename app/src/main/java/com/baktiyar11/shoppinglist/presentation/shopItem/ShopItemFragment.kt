@@ -25,15 +25,15 @@ class ShopItemFragment : Fragment() {
     private var mode: String = MODE_UNKNOWN
     private var shopItemId: Int = UNDEFINED_ID
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseParams()
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnEditingFinishedListener) onEditingFinishedListener = context
         else throw RuntimeException("Activity must implement OnEditingFinishedListener")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parseParams()
     }
 
     override fun onCreateView(
